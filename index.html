@@ -9,14 +9,15 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0D1117;
-    --bg-card: #161B22;
-    --bg-card-hover: #1C2128;
-    --text: #E6E1D8;
-    --text-dim: #8B8478;
-    --accent: #4FD1C5;
-    --accent-dim: #2F5C57;
-    --line: #2A313C;
+    --bg: #0A0414;
+    --bg-card: #150A28;
+    --bg-card-hover: #1E0F38;
+    --text: #E8E0F5;
+    --text-dim: #9384B5;
+    --accent: #C026D3;
+    --accent2: #5EEAD4;
+    --accent-dim: #5B2A6E;
+    --line: #2D1A45;
     --mono: 'JetBrains Mono', monospace;
     --sans: 'Inter', sans-serif;
   }
@@ -27,10 +28,39 @@
 
   body {
     background: var(--bg);
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(192,38,211,0.15), transparent 40%),
+      radial-gradient(circle at 80% 10%, rgba(94,234,212,0.08), transparent 40%),
+      linear-gradient(rgba(192,38,211,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(192,38,211,0.04) 1px, transparent 1px);
+    background-size: auto, auto, 48px 48px, 48px 48px;
     color: var(--text);
     font-family: var(--sans);
     line-height: 1.6;
     font-size: 16px;
+    position: relative;
+  }
+
+  /* Cursor glow */
+  .cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(192,38,211,0.18), rgba(94,234,212,0.06) 40%, transparent 70%);
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    transition: opacity 0.3s;
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cursor-glow { display: none; }
+  }
+  @media (hover: none) {
+    .cursor-glow { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -48,6 +78,8 @@
     max-width: 760px;
     margin: 0 auto;
     padding: 0 24px;
+    position: relative;
+    z-index: 1;
   }
 
   /* ---------- Header / status bar ---------- */
@@ -58,6 +90,8 @@
     font-size: 12px;
     color: var(--text-dim);
     letter-spacing: 0.05em;
+    position: relative;
+    z-index: 1;
   }
   .statusbar .wrap {
     display: flex;
@@ -71,26 +105,28 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: var(--accent);
+    background: var(--accent2);
     margin-right: 8px;
-    box-shadow: 0 0 0 0 rgba(79,209,197,0.5);
+    box-shadow: 0 0 0 0 rgba(94,234,212,0.5);
     animation: pulse 2.4s infinite;
   }
   @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(79,209,197,0.45); }
-    70% { box-shadow: 0 0 0 7px rgba(79,209,197,0); }
-    100% { box-shadow: 0 0 0 0 rgba(79,209,197,0); }
+    0% { box-shadow: 0 0 0 0 rgba(94,234,212,0.45); }
+    70% { box-shadow: 0 0 0 7px rgba(94,234,212,0); }
+    100% { box-shadow: 0 0 0 0 rgba(94,234,212,0); }
   }
 
   /* ---------- Hero ---------- */
   .hero {
     padding: 72px 0 56px;
     border-bottom: 1px solid var(--line);
+    position: relative;
+    z-index: 1;
   }
   .hero .eyebrow {
     font-family: var(--mono);
     font-size: 13px;
-    color: var(--accent);
+    color: var(--accent2);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     margin-bottom: 18px;
@@ -103,7 +139,10 @@
     letter-spacing: -0.01em;
     margin-bottom: 18px;
   }
-  .hero h1 .accent { color: var(--accent); }
+  .hero h1 .accent {
+    color: var(--accent);
+    text-shadow: 0 0 18px rgba(192,38,211,0.55), 0 0 40px rgba(192,38,211,0.25);
+  }
   .hero p.lede {
     color: var(--text-dim);
     font-size: 1.05rem;
@@ -133,6 +172,8 @@
   .section {
     padding: 56px 0;
     border-bottom: 1px solid var(--line);
+    position: relative;
+    z-index: 1;
   }
   .section:last-of-type { border-bottom: none; }
   .section-head {
@@ -173,9 +214,10 @@
     transition: border-color 0.18s, transform 0.18s, background 0.18s;
   }
   .node:hover {
-    border-color: var(--accent-dim);
+    border-color: var(--accent);
     background: var(--bg-card-hover);
     transform: translateX(4px);
+    box-shadow: 0 0 24px rgba(192,38,211,0.18);
   }
   .node:not(:last-child)::after {
     content: '';
@@ -350,6 +392,8 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 12px;
+    position: relative;
+    z-index: 1;
   }
   footer a { color: var(--text-dim); }
   footer a:hover { color: var(--accent); }
@@ -357,10 +401,11 @@
 </head>
 <body>
 
+  <div class="cursor-glow" id="cursorGlow"></div>
+
   <div class="statusbar">
     <div class="wrap">
       <span><span class="status-dot"></span>open to work — software engineer, new grad 2026</span>
-      <span>buffalo, ny / quito, ec</span>
     </div>
   </div>
 
@@ -373,12 +418,14 @@
         Certificate in Data Intensive Computing. My coursework and projects center on
         distributed systems and large-scale data processing — consensus protocols,
         peer-to-peer routing, fault detection, and the Spark/Hadoop pipelines that move
-        data through them.
+        data through them. I also practice data structures and algorithms regularly
+        on LeetCode, using NeetCode's roadmap to guide my study.
       </p>
       <div class="hero-links">
         <a href="mailto:bradrguevara@gmail.com">email</a>
         <a href="https://linkedin.com/in/bradguevara" target="_blank" rel="noopener">linkedin</a>
         <a href="https://github.com/bradguevara" target="_blank" rel="noopener">github</a>
+        <a href="https://leetcode.com/u/bguevarapinos/" target="_blank" rel="noopener">leetcode</a>
         <a href="tel:8456509432">845-650-9432</a>
       </div>
     </div>
@@ -397,14 +444,14 @@
 
         <article class="node">
           <div class="node-head">
-            <h3>Raft Consensus Implementation</h3>
+            <h3>Raft Leader Election</h3>
             <span class="node-date">Mar 2025</span>
           </div>
           <div class="node-stack"><span>Go</span><span>Raft</span><span>Consensus</span></div>
           <ul>
-            <li>Implemented the full Raft consensus protocol, including leader election, log replication, and persistence.</li>
-            <li>Built randomized election timeouts and heartbeat-driven AppendEntries RPCs to maintain leader stability across the cluster.</li>
-            <li>Added log compaction via snapshotting to bound state size and recover crashed nodes to a consistent state.</li>
+            <li>Implemented the leader election portion of the Raft consensus protocol in Go.</li>
+            <li>Built randomized election timeouts and heartbeat-driven RPCs to detect leader failure and trigger new elections.</li>
+            <li>Handled term tracking and vote requests to ensure at most one leader per term across the cluster.</li>
           </ul>
         </article>
 
@@ -430,7 +477,7 @@
           <ul>
             <li>Built a multi-process message service using Go, TCP sockets, and channels — sub-10ms message latency.</li>
             <li>Implemented a heartbeat-based failure detector identifying node failures within 500ms.</li>
-            <li>Optimized serialization with Protobuf, cutting message size by 30% versus JSON.</li>
+            <li>Learned and implemented Protobuf-based message serialization over a custom length-prefixed TCP framing protocol.</li>
           </ul>
         </article>
 
@@ -457,6 +504,20 @@
             <li>Built a full-stack platform with a team for rating, reviewing, and discussing movies.</li>
             <li>Developed React/JSX front-end components with custom CSS for dynamic, responsive UI.</li>
             <li>Created PHP REST APIs connected to MySQL for reviews, auth, reactions, and watchlists.</li>
+          </ul>
+        </article>
+
+        <article class="node">
+          <div class="node-head">
+            <h3>Video Platform — Backend</h3>
+            <span class="node-date">CSE312</span>
+          </div>
+          <div class="node-stack"><span>Python</span><span>WebSockets</span><span>JWT</span><span>FFmpeg</span><span>OAuth</span></div>
+          <ul>
+            <li>Built the backend for a video platform on a provided starter server, learning REST fundamentals — handling GET, POST, PATCH, and DELETE requests and serving JSON responses.</li>
+            <li>Implemented JWT-based authentication with cookie sessions, two-factor authenticator support, and OAuth login (Login with GitHub).</li>
+            <li>Used FFmpeg for video processing, with database-backed storage for files, images, and video uploads.</li>
+            <li>Implemented WebSockets for real-time chat and peer-to-peer video calls.</li>
           </ul>
         </article>
 
@@ -554,5 +615,32 @@
     </div>
   </footer>
 
+  <script>
+    (function () {
+      var glow = document.getElementById('cursorGlow');
+      if (!glow) return;
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var coarse = window.matchMedia('(hover: none)').matches;
+      if (reduceMotion || coarse) return;
+
+      var targetX = window.innerWidth / 2;
+      var targetY = window.innerHeight / 2;
+      var curX = targetX;
+      var curY = targetY;
+
+      window.addEventListener('mousemove', function (e) {
+        targetX = e.clientX;
+        targetY = e.clientY;
+      });
+
+      function animate() {
+        curX += (targetX - curX) * 0.12;
+        curY += (targetY - curY) * 0.12;
+        glow.style.transform = 'translate(' + curX + 'px, ' + curY + 'px) translate(-50%, -50%)';
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+  </script>
 </body>
 </html>
